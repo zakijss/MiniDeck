@@ -1,4 +1,4 @@
-<p align="center"><img src="docs/hero.jpg" alt="Two Miyoo Mini Plus handhelds on a desk, one playing music in MiniTape and one showing server stats in MiniRack" width="100%"></p>
+<p align="center"><img src="docs/hero.jpg" alt="Seven Miyoo Mini Plus handhelds on a stone table in a loft, three on stands and four lying down, running the MiniDeck apps" width="100%"></p>
 
 [![CI](https://github.com/zakijss/MiniDeck/actions/workflows/ci.yml/badge.svg)](https://github.com/zakijss/MiniDeck/actions/workflows/ci.yml)
 [![Bundle](https://github.com/zakijss/MiniDeck/actions/workflows/bundle.yml/badge.svg)](https://github.com/zakijss/MiniDeck/releases/latest)
@@ -25,7 +25,7 @@ MiniScale.
 | [MiniPulse](https://github.com/zakijss/MiniPulse) | Latency, download and upload over Wi-Fi |
 
 
-<p align="center"><img src="docs/desk.jpg" alt="Two Miyoo Mini Plus handhelds lying on a desk, running MiniRack and MiniTape" width="100%"></p>
+<p align="center"><img src="docs/desk.jpg" alt="Two Miyoo Mini Plus handhelds on a sunlit window sill, a white one on a stand playing music in MiniTape and a smoked black one lying beside it running MiniRack" width="100%"></p>
 
 ## Install
 
