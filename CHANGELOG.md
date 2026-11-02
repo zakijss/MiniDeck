@@ -7,6 +7,12 @@ changelog in its repository. The format follows
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-02
+
+### Fixed
+
+- The on-screen keyboard had no visible way out: B only deleted, and MENU (which cancels) wasn't shown. Now B on an empty field goes back (a held B that clears the text doesn't), and the footer shows B Back, or MENU Cancel once there is text.
+
 ## [1.0.0] - 2026-11-02
 
 ### Added
@@ -38,5 +44,6 @@ changelog in its repository. The format follows
   apps' own releases.
 - `tools/cover`, `tools/mockhub` and the app icons.
 
-[Unreleased]: https://github.com/zakijss/MiniDeck/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/zakijss/MiniDeck/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/zakijss/MiniDeck/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/zakijss/MiniDeck/releases/tag/v1.0.0

@@ -90,7 +90,9 @@ func nearest(row []key, x int) int {
 // Prompt asks for text with the on-screen keyboard. It returns the text and
 // true, or false if cancelled. secret hides the text (the eye key or
 // SELECT shows it). L1/R1 move the cursor, so a typo in the middle of an
-// address can be fixed without retyping the rest.
+// address can be fixed without retyping the rest. B deletes; on an empty
+// field a fresh B press (not a held one) goes back, like B everywhere
+// else, and MENU always cancels.
 func (s *Screen) Prompt(input <-chan Event, title, initial, hint string, secret bool) (string, bool) {
 	text := []rune(initial)
 	cur := len(text)
@@ -148,6 +150,9 @@ func (s *Screen) Prompt(input <-chan Event, title, initial, hint string, secret 
 		case R2:
 			cur = len(text)
 		case B:
+			if len(text) == 0 && !ev.Repeat {
+				return initial, false
+			}
 			del()
 		case X:
 			layer = (layer + 1) % len(layers)
@@ -268,9 +273,13 @@ func (s *Screen) drawPrompt(title string, text []rune, cur int, hint string, sec
 			s.TextCenter(cx, centerY(f, cy), k.label, f, fg)
 		}
 	}
-	hints := []Hint{{"A", "Type"}, {"B", "Delete"}, {"L1/R1", "Move"}, {"START", "Done"}}
-	if secret {
-		hints = append(hints, Hint{"SELECT", "Show"})
+	// Four hints fit without cutting labels. START (done) and SELECT (show)
+	// also have keys on the board, so with text in the field their place
+	// goes to MENU Cancel; with an empty field B Back says how to leave.
+	hints := []Hint{{"A", "Type"}, {"B", "Back"}, {"L1/R1", "Move"}, {"START", "Done"}}
+	if len(text) > 0 {
+		hints[1].Label = "Delete"
+		hints[3] = Hint{"MENU", "Cancel"}
 	}
 	s.Footer(hints...)
 	s.Present()
