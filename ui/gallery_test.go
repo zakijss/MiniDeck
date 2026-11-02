@@ -64,6 +64,11 @@ func TestGallery(t *testing.T) {
 	keys := keysFor(0, false, false)
 	s.drawPrompt("Repository address", []rune("https://github.com/example"), 26, "An https:// address of a repository", false, false, keys, 2, 3, 0)
 
+	// keyboard, empty field (B goes back)
+	present("keyboard-empty")
+	keys = keysFor(0, false, false)
+	s.drawPrompt("Search", nil, 0, "", false, false, keys, 1, 0, 0)
+
 	// keyboard with a secret
 	present("keyboard-secret")
 	keys = keysFor(1, true, false)
