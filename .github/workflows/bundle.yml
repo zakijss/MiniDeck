@@ -1,0 +1,47 @@
+name: Bundle
+
+# Publishes the all-apps zip and MiniMart's catalogue from every app's
+# latest release (tools/bundle). Runs daily, so app releases show up in the
+# Store within a day, and by hand right after one.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 5 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e  # v7.0.0
+        with:
+          go-version-file: go.mod
+      - name: Collect the apps' latest releases
+        run: go run ./tools/bundle -o dist
+      - name: MiniMart installs every app from the catalogue
+        run: |
+          git clone -q --depth 1 https://github.com/zakijss/MiniMart.git build/store
+          cd build/store && MINIDECK_DIST="$GITHUB_WORKSPACE/dist" go test -count=1 -run TestReleaseCatalog -v ./cmd/minimart
+      - name: Publish, if anything changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          old=$(gh release download --pattern catalog.json --output - 2>/dev/null | python3 -c 'import json,sys; c=json.load(sys.stdin); print(sorted((a["name"], a["version"]) for a in c["apps"]))' || true)
+          new=$(python3 -c 'import json; c=json.load(open("dist/catalog.json")); print(sorted((a["name"], a["version"]) for a in c["apps"]))')
+          if [ "$old" = "$new" ]; then echo "no app has changed"; exit 0; fi
+          tag="apps-$(date -u +%Y.%m.%d-%H%M)"
+          {
+            echo "Every MiniDeck app in one zip, and MiniMart's catalogue."
+            echo
+            echo "Unzip \`minideck-all.zip\` onto the root of the SD card and restart the Miyoo."
+            echo
+            echo "| App | Version |"
+            echo "|---|---|"
+            python3 -c 'import json; [print("| [%s](https://github.com/%s) | %s |" % (a["name"], a["repo"], a["version"])) for a in json.load(open("dist/catalog.json"))["apps"]]'
+            printf '\nSHA-256:\n\n```\n%s\n```\n' "$(cat dist/SHA256SUMS)"
+          } > notes.md
+          gh release create "$tag" --title "MiniDeck apps $(date -u +%Y-%m-%d)" --notes-file notes.md --latest \
+            dist/minideck-all.zip dist/catalog.json dist/SHA256SUMS

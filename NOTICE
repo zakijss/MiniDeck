@@ -1,0 +1,39 @@
+The MiniDeck library includes third-party material under its own licence.
+Every app's release zip carries these licences in its licenses/ folder.
+
+golang.org/x/net, golang.org/x/image, golang.org/x/text and
+golang.org/x/crypto/x509roots/fallback (Mozilla's root certificates,
+compiled into the apps that use HTTPS because the device has no
+certificate store), copyright The Go Authors, BSD 3-Clause licence
+(licenses/golang-x-net-LICENSE, licenses/golang-x-image-LICENSE,
+licenses/golang-x-text-LICENSE, licenses/golang-x-crypto-LICENSE).
+
+Pixel Operator (Regular, Bold, 8 and 8 Bold), by Jayvee Enaguas
+(HarvettFox96), the interface font of every app, dedicated to the public
+domain under CC0 1.0 (licenses/pixel-operator-CC0.txt). The font files in
+ui/fonts are unmodified copies from its 2018-10-04 release.
+
+Inter (Regular, Bold), copyright The Inter Project Authors
+(https://github.com/rsms/inter), embedded in the app binaries to draw the
+characters Pixel Operator lacks, under the SIL Open Font License 1.1
+(licenses/inter-OFL.txt). The font files in ui/fonts are unmodified
+copies from the Inter 4.1 release.
+
+GNU Unifont 18.0.01, copyright Roman Czyborra, Paul Hardy, Qianqian Fang
+and the other Unifont authors, embedded in the app binaries to draw the
+characters neither Pixel Operator nor Inter has (Arabic, Hebrew, Thai,
+Chinese, Japanese, Korean and more). Unifont is dual-licensed; MiniDeck uses
+it under the SIL Open Font License 1.1 (licenses/unifont-OFL.txt).
+ui/fonts/unifont.bin holds the glyphs of unifont-18.0.01.hex.gz
+(https://unifoundry.com/pub/unifont/unifont-18.0.01/font-builds/, signature
+checked against the GNU keyring) for the Basic Multilingual Plane,
+unchanged but repacked into compressed pages by ui/mkintl.go, and
+stays under the same licence.
+
+ui/intl_tables.go (Arabic joining types and presentation forms,
+mirrored characters) is generated from the Unicode Character Database 18.0,
+copyright Unicode, Inc., under the Unicode License v3
+(licenses/unicode-LICENSE.txt).
+
+The app icons and the banner are drawn by scripts/make-icons.py and
+tools/banner, and are part of MiniDeck (MIT).
