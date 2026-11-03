@@ -139,7 +139,7 @@ func unpack(z []byte, all map[string]file) error {
 			continue
 		}
 		name := path.Clean(f.Name)
-		if strings.HasPrefix(name, "../") || path.IsAbs(name) {
+		if name == ".." || strings.HasPrefix(name, "../") || path.IsAbs(name) {
 			return fmt.Errorf("unsafe path %q", f.Name)
 		}
 		if _, dup := all[name]; dup {

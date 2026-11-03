@@ -45,13 +45,16 @@ type picKey struct {
 func ScaleCrop(img image.Image, w, h int) *image.RGBA {
 	b := img.Bounds()
 	src := b
+	// int64: a picture from the network can be wide enough to overflow a
+	// 32-bit int on the device when multiplied by the target size.
+	dx, dy, w64, h64 := int64(b.Dx()), int64(b.Dy()), int64(w), int64(h)
 	switch {
-	case b.Dx()*h > b.Dy()*w: // wider than the target: crop the sides
-		cw := b.Dy() * w / h
+	case dx*h64 > dy*w64: // wider than the target: crop the sides
+		cw := int(dy * w64 / h64)
 		src.Min.X = b.Min.X + (b.Dx()-cw)/2
 		src.Max.X = src.Min.X + cw
-	case b.Dx()*h < b.Dy()*w: // taller: crop top and bottom
-		ch := b.Dx() * h / w
+	case dx*h64 < dy*w64: // taller: crop top and bottom
+		ch := int(dx * h64 / w64)
 		src.Min.Y = b.Min.Y + (b.Dy()-ch)/2
 		src.Max.Y = src.Min.Y + ch
 	}

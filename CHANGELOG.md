@@ -7,6 +7,11 @@ changelog in its repository. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- `ui`: `ScaleCrop` works out its crop in 64-bit, so a very wide picture can't overflow on the device's 32-bit int.
+- `tools/bundle`: a zip entry named `..` is refused, like any other path that leaves the SD card root.
+
 ## [1.0.1] - 2026-11-02
 
 ### Fixed
