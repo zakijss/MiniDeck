@@ -35,7 +35,7 @@ import (
 )
 
 // repos are the apps' repositories, in the order MiniMart lists them.
-var repos = []string{"MiniScale", "MiniRack", "MiniTape", "MiniKey", "MiniTop", "MiniMart", "MiniBook", "MiniRadar", "MiniPulse"}
+var repos = []string{"MiniScale", "MiniRack", "MiniTape", "MiniFin", "MiniKey", "MiniTop", "MiniMart", "MiniBook", "MiniRadar", "MiniPulse"}
 
 const owner = "zakijss"
 

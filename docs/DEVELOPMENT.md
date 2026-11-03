@@ -28,7 +28,7 @@ code:
 |---|---|
 | [MiniDeck](https://github.com/zakijss/MiniDeck) | The library (module `github.com/zakijss/minideck`), the icons, the tools, and the all-apps release with MiniMart's catalogue. |
 | [MiniScale](https://github.com/zakijss/MiniScale) | The Tailscale client: `miniscale`, `miniscale-fwd`, `miniscale-badge`, `miniscale.sh` and the Tailscale build. |
-| [MiniRack](https://github.com/zakijss/MiniRack), [MiniTape](https://github.com/zakijss/MiniTape), [MiniKey](https://github.com/zakijss/MiniKey), [Tasks](https://github.com/zakijss/MiniTop), [Store](https://github.com/zakijss/MiniMart), [Guide](https://github.com/zakijss/MiniBook), [Network](https://github.com/zakijss/MiniRadar), [MiniPulse](https://github.com/zakijss/MiniPulse) | One app each. |
+| [MiniRack](https://github.com/zakijss/MiniRack), [MiniTape](https://github.com/zakijss/MiniTape), [MiniFin](https://github.com/zakijss/MiniFin), [MiniKey](https://github.com/zakijss/MiniKey), [Tasks](https://github.com/zakijss/MiniTop), [Store](https://github.com/zakijss/MiniMart), [Guide](https://github.com/zakijss/MiniBook), [Network](https://github.com/zakijss/MiniRadar), [MiniPulse](https://github.com/zakijss/MiniPulse) | One app each. |
 
 The library's packages:
 

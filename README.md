@@ -17,6 +17,7 @@ MiniScale.
 | [MiniScale](https://github.com/zakijss/MiniScale) | Puts the Miyoo on your tailnet: devices, exit nodes, Taildrop, QR login (unofficial Tailscale client) |
 | [MiniRack](https://github.com/zakijss/MiniRack) | Live CPU, memory, disk and temperature from Glances, Beszel or Vantage |
 | [MiniTape](https://github.com/zakijss/MiniTape) | Navidrome and Subsonic music that keeps playing in the menu and other apps |
+| [MiniFin](https://github.com/zakijss/MiniFin) | Jellyfin movies and shows with hardware video decoding, Quick Connect and downloads (unofficial client) |
 | [MiniKey](https://github.com/zakijss/MiniKey) | 2FA codes, locked with a code pressed on the buttons |
 | [MiniTop](https://github.com/zakijss/MiniTop) | What's running and what starts at boot; keeps the clock right |
 | [MiniMart](https://github.com/zakijss/MiniMart) | Themes, icon packs, apps and homebrew games, checked before installing |
