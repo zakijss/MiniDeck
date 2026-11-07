@@ -151,8 +151,10 @@ func (l *List) Draw(s *Screen, r image.Rectangle) {
 			right -= 26
 		}
 		if it.Detail != "" {
-			dw := Measure(Small, it.Detail)
-			s.Text(right-dw, centerY(Small, y+rh/2), it.Detail, Small, fg2)
+			// the label comes first: a long detail is cut, never drawn over it
+			d := Fit(Small, it.Detail, right-x-Measure(Heading, it.Label)-14)
+			dw := Measure(Small, d)
+			s.Text(right-dw, centerY(Small, y+rh/2), d, Small, fg2)
 			right -= dw + 14
 		}
 		room := right - x
