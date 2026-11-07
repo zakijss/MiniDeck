@@ -7,6 +7,8 @@ changelog in its repository. The format follows
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-11-07
+
 ### Fixed
 
 - `ui`: `ScaleCrop` works out its crop in 64-bit, so a very wide picture can't overflow on the device's 32-bit int.
@@ -50,6 +52,7 @@ changelog in its repository. The format follows
   apps' own releases.
 - `tools/cover`, `tools/mockhub` and the app icons.
 
-[Unreleased]: https://github.com/zakijss/MiniDeck/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/zakijss/MiniDeck/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/zakijss/MiniDeck/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/zakijss/MiniDeck/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/zakijss/MiniDeck/releases/tag/v1.0.0
