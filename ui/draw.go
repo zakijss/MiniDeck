@@ -31,12 +31,12 @@ var (
 	Line     = nightPalette.line    // separators, empty tracks
 	Text     = nightPalette.text
 	Muted    = nightPalette.muted
-	Faint    = nightPalette.faint    // placeholders
+	Faint    = nightPalette.faint    // placeholders and quiet small text
 	OnFocus  = nightPalette.ink      // text on the selection
 	OnFocus2 = nightPalette.onFocus2 // secondary text on the selection
 	Good     = rgb(0x5ccf86)
 	Warn     = rgb(0xf5a742)
-	Bad      = rgb(0xf05c54)
+	Bad      = rgb(0xf5948e)
 	// Accent is the focus and emphasis colour: the selection's lavender.
 	Accent = nightPalette.accent
 )

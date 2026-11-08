@@ -35,8 +35,8 @@ type palette struct {
 // nightPalette is the default look: night blue with a lavender selection.
 var nightPalette = palette{
 	bg: rgb(0x111226), surface: rgb(0x282b4e), raised: rgb(0x3c4068), line: rgb(0x464a74),
-	text: rgb(0xf0f1fa), muted: rgb(0xacb0d2), faint: rgb(0x8489ae), ink: rgb3(27, 29, 58),
-	onFocus2: rgb(0x3e4280), accent: rgb(0xbec2f8), titleShadow: rgb3(58, 61, 122),
+	text: rgb(0xf0f1fa), muted: rgb(0xc7c9e1), faint: rgb(0xa6a9c5), ink: rgb3(27, 29, 58),
+	onFocus2: rgb(0x2d305d), accent: rgb(0xbec2f8), titleShadow: rgb3(58, 61, 122),
 	night:   ramp{rgb3(60, 64, 104), rgb3(40, 43, 78), rgb3(29, 31, 60)},
 	focus:   ramp{rgb3(232, 234, 255), rgb3(190, 194, 248), rgb3(126, 131, 214)},
 	key:     ramp{rgb3(96, 101, 148), rgb3(68, 72, 114), rgb3(44, 47, 84)},

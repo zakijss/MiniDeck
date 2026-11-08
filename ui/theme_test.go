@@ -47,7 +47,7 @@ func pairs() []struct {
 	fg, bg   color.RGBA
 	minRatio float64
 } {
-	card, selCard := panelRamp(0.10).base, panelRamp(0.16).base
+	card, dialog, selCard := panelRamp(0.10).base, panelRamp(0.13).base, panelRamp(0.16).base
 	return []struct {
 		name     string
 		fg, bg   color.RGBA
@@ -61,18 +61,21 @@ func pairs() []struct {
 		{"Text on the background", Text, bgLevels[3], 4.5},
 		{"Muted on Surface", Muted, Surface, 4.5},
 		{"Muted on a card", Muted, card, 4.5},
+		{"Muted on a dialog", Muted, dialog, 4.5},
 		{"Muted on the background", Muted, bgLevels[3], 4.5},
-		{"Faint on Surface", Faint, Surface, 3},
+		{"Faint on Surface", Faint, Surface, 4.5}, // apps draw small text in it
+		{"Faint on a card", Faint, card, 4.5},
 		{"Accent on Surface", Accent, Surface, 4.5},
 		{"Accent on the background", Accent, bgLevels[3], 4.5},
 		{"OnFocus on the selection", OnFocus, focusRamp.base, 4.5},
-		{"OnFocus2 on the selection", OnFocus2, focusRamp.base, 3},
+		{"OnFocus2 on the selection", OnFocus2, focusRamp.base, 4.5}, // a selected row's subtitle
 		{"Ink on the selection's light edge", Ink, focusRamp.hi, 4.5},
 		{"Good on Surface", Good, Surface, 3},
 		{"Warn on Surface", Warn, Surface, 3},
-		{"Bad on Surface", Bad, Surface, 3},
+		{"Bad on Surface", Bad, Surface, 4.5}, // error lines are small text
 		{"Good on a card", Good, card, 3},
-		{"Bad on a card", Bad, card, 3},
+		{"Bad on a card", Bad, card, 4.5},
+		{"Bad on the background", Bad, bgLevels[3], 4.5},
 	}
 }
 
@@ -91,6 +94,43 @@ func TestThemeContrast(t *testing.T) {
 				// the selection stands out from a panel
 				if contrast(focusRamp.base, Surface) < 3 {
 					t.Errorf("%s: the selection is hard to tell from a card", look)
+				}
+			}
+		}
+	}
+}
+
+// On a dim panel (the backlight at half in a lit room) the screen's light
+// halves but the room's glare, 0.05 of full white, stays, so contrast drops.
+// Text, Muted and a selected row's subtitle still read at 4.5:1 there.
+func TestDimPanelContrast(t *testing.T) {
+	dim := func(a, b color.RGBA) float64 {
+		la, lb := luminance(a)/2+0.05, luminance(b)/2+0.05
+		return max(la, lb) / min(la, lb)
+	}
+	for _, th := range Themes {
+		for _, ac := range AccentHues {
+			for _, br := range brightnesses {
+				withAppearance(t, Appearance{Theme: th.ID, Accent: ac.ID, Brightness: br.ID})
+				card, dialog := panelRamp(0.10).base, panelRamp(0.13).base
+				for _, p := range []struct {
+					name     string
+					fg, bg   color.RGBA
+					minRatio float64
+				}{
+					{"Text on Surface", Text, Surface, 4.5},
+					{"Text on a key", Text, keyRamp.base, 4.5},
+					{"Muted on Surface", Muted, Surface, 4.5},
+					{"Muted on a card", Muted, card, 4.5},
+					{"Muted on a dialog", Muted, dialog, 4.5},
+					{"Muted on the background", Muted, bgLevels[3], 4.5},
+					{"OnFocus2 on the selection", OnFocus2, focusRamp.base, 4.5},
+					{"Faint on Surface", Faint, Surface, 3},
+					{"Bad on a card", Bad, card, 3},
+				} {
+					if r := dim(p.fg, p.bg); r < p.minRatio {
+						t.Errorf("%s/%s/%s, dim panel: %s is %.2f:1, want %.1f:1", th.Name, ac.Name, br.Name, p.name, r, p.minRatio)
+					}
 				}
 			}
 		}

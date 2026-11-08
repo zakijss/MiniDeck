@@ -64,7 +64,7 @@ func Peers() ([]Peer, error) {
 		return peers[i].Name < peers[j].Name
 	})
 	if len(peers) == 0 {
-		return nil, sentence("No other devices on your tailnet yet.")
+		return nil, sentence("No other devices on your tailnet yet. Type the address instead.")
 	}
 	return peers, nil
 }

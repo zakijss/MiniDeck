@@ -98,7 +98,7 @@ func (fm *Form) Run(s *Screen, input <-chan Event) bool {
 					return true
 				}
 			case r.button == "remove":
-				if s.Confirm(input, "Remove this?", "", "Remove") {
+				if s.Confirm(input, "Remove this?", "It can't be undone.", "Remove") {
 					fm.Delete()
 					return true
 				}
@@ -153,7 +153,7 @@ func (fm *Form) save(s *Screen, input <-chan Event) bool {
 	if fm.Check != nil {
 		s.Alert("Checking…", "Connecting to your server.")
 		if err := fm.Check(); err != nil {
-			if !s.Confirm(input, "That didn't work", err.Error(), "Save anyway") {
+			if !s.Confirm(input, "Couldn't connect", err.Error(), "Save anyway") {
 				return false
 			}
 		}
@@ -355,7 +355,7 @@ func (s *Screen) PickHost(input <-chan Event, peers func() ([]string, []string, 
 	s.Alert("Your tailnet", "Looking for devices…")
 	names, details, err := peers()
 	if err != nil {
-		s.Notice(input, "No device list", err.Error())
+		s.Notice(input, "Couldn't list devices", err.Error())
 		return "", false
 	}
 	items := []Item{{Label: "Type the address", Sub: "Use the keyboard", Icon: "list", Tint: Muted}}
