@@ -7,6 +7,18 @@ changelog in its repository. The format follows
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-11-08
+
+### Fixed
+
+- `ui`: grey and red small text is lighter, so it reads at 4.5:1 in every theme, accent and brightness.
+- `ui`: secondary text on a selected row is darker, so it reads at 4.5:1 on the lavender.
+
+### Changed
+
+- `ui`: a failed server check says "Couldn't connect", and Remove warns that it can't be undone.
+- `tnet`, `ui`: an empty tailnet says to type the address instead, under "Couldn't list devices".
+
 ## [1.0.2] - 2026-11-07
 
 ### Fixed
@@ -52,7 +64,8 @@ changelog in its repository. The format follows
   apps' own releases.
 - `tools/cover`, `tools/mockhub` and the app icons.
 
-[Unreleased]: https://github.com/zakijss/MiniDeck/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/zakijss/MiniDeck/compare/v1.0.3...HEAD
+[1.0.3]: https://github.com/zakijss/MiniDeck/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/zakijss/MiniDeck/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/zakijss/MiniDeck/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/zakijss/MiniDeck/releases/tag/v1.0.0
