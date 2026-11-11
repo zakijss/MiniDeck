@@ -58,7 +58,7 @@ An app repository has the same shape everywhere:
 ## Tools
 
 Docker, git and make are all you need. Go runs in the
-`golang:1.27.3-bookworm` image, with module and build caches in Docker
+`golang:1.27.4-bookworm` image, with module and build caches in Docker
 volumes; with Go 1.27 or newer installed, add `GO=go` to any make target.
 Every repository has the same targets: `make check` runs what CI runs, and
 `make package VERSION=x.y.z` writes the release files into `dist/`.

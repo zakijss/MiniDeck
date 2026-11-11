@@ -7,6 +7,10 @@ changelog in its repository. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- Dependencies updated: golang.org/x/image 0.48.0, x/text 0.44.0, newer root certificates (x509roots/fallback); Go 1.27.4.
+
 ## [1.0.3] - 2026-11-08
 
 ### Fixed
