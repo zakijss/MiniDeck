@@ -7,6 +7,8 @@ changelog in its repository. The format follows
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-12
+
 ### Added
 
 - tnet: while MiniScale joins a WireGuard or NetBird network, apps also send the addresses and names it lists in /tmp/miniscale/routes through its proxy. The tailnet rules are unchanged, and this device's own services always stay direct.
@@ -74,7 +76,8 @@ changelog in its repository. The format follows
   apps' own releases.
 - `tools/cover`, `tools/mockhub` and the app icons.
 
-[Unreleased]: https://github.com/zakijss/MiniDeck/compare/v1.0.4...HEAD
+[Unreleased]: https://github.com/zakijss/MiniDeck/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/zakijss/MiniDeck/compare/v1.0.4...v1.1.0
 [1.0.4]: https://github.com/zakijss/MiniDeck/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/zakijss/MiniDeck/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/zakijss/MiniDeck/compare/v1.0.1...v1.0.2
