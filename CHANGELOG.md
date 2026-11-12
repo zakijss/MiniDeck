@@ -7,6 +7,10 @@ changelog in its repository. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- tnet: while MiniScale joins a WireGuard or NetBird network, apps also send the addresses and names it lists in /tmp/miniscale/routes through its proxy. The tailnet rules are unchanged, and this device's own services always stay direct.
+
 ## [1.0.4] - 2026-11-12
 
 ### Changed

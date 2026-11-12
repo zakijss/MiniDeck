@@ -2,7 +2,9 @@
 // MiniDeck's SOCKS5 proxy and everything else directly.
 //
 // A host goes through the tailnet when it is a 100.64.0.0/10 address, ends in
-// .ts.net, or is a single-label name (MagicDNS). The proxies listen on the
+// .ts.net, or is a single-label name (MagicDNS). When MiniScale joins a
+// WireGuard or NetBird network instead, it lists in /tmp/miniscale/routes
+// what else goes through the proxy (see routes). The proxies listen on the
 // ports set in MiniScale's miniscale.conf (1055 and 1056 by default).
 // MINIDECK_SOCKS and MINIDECK_HTTP_PROXY override the addresses; "off"
 // disables a proxy.
@@ -12,6 +14,7 @@ import (
 	"net"
 	"net/http"
 	"net/http/httptrace"
+	"net/netip"
 	"net/url"
 	"os"
 	"strconv"
@@ -113,9 +116,98 @@ func OnTailnet(host string) bool {
 		return false
 	}
 	if ip := net.ParseIP(host); ip != nil {
-		return cgnat.Contains(ip)
+		return cgnat.Contains(ip) || currentRoutes().hasIP(ip)
 	}
-	return strings.HasSuffix(host, ".ts.net") || !strings.Contains(host, ".")
+	return strings.HasSuffix(host, ".ts.net") || !strings.Contains(host, ".") || currentRoutes().hasName(host)
+}
+
+// routesFile is where MiniScale (miniscale.sh or miniscale-wg) lists, while
+// it joins a WireGuard or NetBird network, what goes through the proxy
+// beyond the tailnet rules: one entry per line, a CIDR prefix
+// ("10.8.0.0/24"), a name suffix (".netbird.cloud") or "*" for every name;
+// # starts a comment. It is in RAM and gone when MiniScale stops.
+const routesFile = "/tmp/miniscale/routes"
+
+// routes are the parsed routesFile.
+type routes struct {
+	prefixes []netip.Prefix
+	suffixes []string
+	allNames bool
+}
+
+func parseRoutes(b []byte) routes {
+	var r routes
+	for _, line := range strings.Split(string(b), "\n") {
+		line = strings.TrimSpace(line)
+		if i := strings.IndexByte(line, '#'); i >= 0 {
+			line = strings.TrimSpace(line[:i])
+		}
+		switch {
+		case line == "":
+		case line == "*":
+			r.allNames = true
+		case strings.HasPrefix(line, "."):
+			r.suffixes = append(r.suffixes, strings.ToLower(line))
+		default:
+			if p, err := netip.ParsePrefix(line); err == nil {
+				r.prefixes = append(r.prefixes, p.Masked())
+			}
+		}
+	}
+	return r
+}
+
+func (r routes) hasIP(ip net.IP) bool {
+	if ip.IsLoopback() { // a full tunnel (0.0.0.0/0) never takes this device's own services
+		return false
+	}
+	a, ok := netip.AddrFromSlice(ip)
+	if !ok {
+		return false
+	}
+	a = a.Unmap()
+	for _, p := range r.prefixes {
+		if p.Contains(a) {
+			return true
+		}
+	}
+	return false
+}
+
+func (r routes) hasName(host string) bool {
+	if r.allNames {
+		return true
+	}
+	host = strings.ToLower(strings.TrimSuffix(host, "."))
+	for _, s := range r.suffixes {
+		if strings.HasSuffix(host, s) {
+			return true
+		}
+	}
+	return false
+}
+
+// The routes file is read again every few seconds, not on every request:
+// MiniScale can switch networks while an app is open.
+var routesCache struct {
+	sync.Mutex
+	at   time.Time
+	r    routes
+	path string // tests point it elsewhere
+}
+
+func currentRoutes() routes {
+	c := &routesCache
+	c.Lock()
+	defer c.Unlock()
+	if c.path == "" {
+		c.path = routesFile
+	}
+	if time.Since(c.at) > 3*time.Second {
+		b, _ := os.ReadFile(c.path)
+		c.r, c.at = parseRoutes(b), time.Now()
+	}
+	return c.r
 }
 
 // ProxyFor is an http.Transport Proxy function.

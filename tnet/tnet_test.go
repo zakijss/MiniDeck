@@ -141,3 +141,42 @@ func TestHTTPProxyURL(t *testing.T) {
 		t.Errorf("default: %v", u)
 	}
 }
+
+// While MiniScale joins a WireGuard or NetBird network, its routes file
+// sends those addresses and names through the proxy too.
+func TestRoutesFile(t *testing.T) {
+	f := filepath.Join(t.TempDir(), "routes")
+	routesCache.Lock()
+	routesCache.path, routesCache.at = f, time.Time{}
+	routesCache.Unlock()
+	defer func() {
+		routesCache.Lock()
+		routesCache.path, routesCache.at = "", time.Time{}
+		routesCache.Unlock()
+	}()
+	reload := func(content string) {
+		os.WriteFile(f, []byte(content), 0o644)
+		routesCache.Lock()
+		routesCache.at = time.Time{}
+		routesCache.Unlock()
+	}
+
+	// no file: the tailnet rules alone
+	if OnTailnet("10.8.0.5") || OnTailnet("nas.example.com") || !OnTailnet("100.101.1.2") || !OnTailnet("nas") {
+		t.Fatal("tailnet rules changed without a routes file")
+	}
+
+	reload("# written by miniscale.sh\n100.64.0.0/10\n.netbird.cloud\n")
+	if !OnTailnet("nas.netbird.cloud:443") || !OnTailnet("NAS.NetBird.Cloud") || OnTailnet("example.com") || OnTailnet("10.8.0.5") {
+		t.Error("NetBird routes")
+	}
+
+	reload("10.8.0.0/24\nfd00::/64\n*\n")
+	if !OnTailnet("10.8.0.5:80") || !OnTailnet("[fd00::5]:80") || OnTailnet("192.168.0.10") || !OnTailnet("example.com") {
+		t.Error("WireGuard routes")
+	}
+	reload("0.0.0.0/0\n::/0\n*\n")
+	if !OnTailnet("192.168.0.10") || OnTailnet("localhost:8080") || OnTailnet("127.0.0.1:45211") || OnTailnet("[::1]:80") {
+		t.Error("full tunnel: everything but this device's own services")
+	}
+}
