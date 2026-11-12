@@ -7,6 +7,8 @@ changelog in its repository. The format follows
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-11-12
+
 ### Changed
 
 - Dependencies updated: golang.org/x/image 0.48.0, x/text 0.44.0, newer root certificates (x509roots/fallback); Go 1.27.4.
@@ -68,7 +70,8 @@ changelog in its repository. The format follows
   apps' own releases.
 - `tools/cover`, `tools/mockhub` and the app icons.
 
-[Unreleased]: https://github.com/zakijss/MiniDeck/compare/v1.0.3...HEAD
+[Unreleased]: https://github.com/zakijss/MiniDeck/compare/v1.0.4...HEAD
+[1.0.4]: https://github.com/zakijss/MiniDeck/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/zakijss/MiniDeck/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/zakijss/MiniDeck/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/zakijss/MiniDeck/compare/v1.0.0...v1.0.1
