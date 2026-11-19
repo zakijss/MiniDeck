@@ -21,6 +21,10 @@ jobs:
           go-version-file: go.mod
       - name: Collect the apps' latest releases
         run: go run ./tools/bundle -o dist
+      - name: The minisig checker for the device
+        run: |
+          CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -trimpath -ldflags "-s -w" -o dist/minisig-armv7 ./cmd/minisig
+          (cd dist && sha256sum minisig-armv7 >> SHA256SUMS)
       - name: MiniMart installs every app from the catalogue
         run: |
           git clone -q --depth 1 https://github.com/zakijss/MiniMart.git build/store
@@ -44,4 +48,4 @@ jobs:
             printf '\nSHA-256:\n\n```\n%s\n```\n' "$(cat dist/SHA256SUMS)"
           } > notes.md
           gh release create "$tag" --title "MiniDeck apps $(date -u +%Y-%m-%d)" --notes-file notes.md --latest \
-            dist/minideck-all.zip dist/catalog.json dist/SHA256SUMS
+            dist/minideck-all.zip dist/catalog.json dist/minisig-armv7 dist/SHA256SUMS

@@ -44,6 +44,7 @@ The library's packages:
 | `atomicfile` | Writes that survive a power cut. |
 | `qr` | The QR encoder for login links. |
 | `version` | The release version stamped into every binary. |
+| `sign` | Checks minisign signatures (Ed25519, prehashed or legacy) against the owner's release key, `sign.ReleaseKey`. |
 
 An app repository has the same shape everywhere:
 
@@ -224,6 +225,38 @@ latest release, checks each zip against its `app.json`, and publishes
 `catalog.json`, `minideck-all.zip` and `SHA256SUMS` as MiniDeck's latest
 release. MiniMart's built-in "MiniDeck" source reads that `catalog.json`.
 It runs every day and by hand (Actions > Bundle > Run workflow).
+
+### Signed releases
+
+The owner's games (and anything else MiniMart marks "signed") are signed
+with [minisign](https://jedisct1.github.io/minisign/) and the owner's
+release key, whose public half is `sign.ReleaseKey`. The secret key stays
+with the owner, behind its passphrase; CI never signs. To sign a release,
+after its assets are built and before or after it is published:
+
+```sh
+minisign -S -s ~/.minisign/release.key -m EndlessSky-Miyoo-1.5.zip   # writes EndlessSky-Miyoo-1.5.zip.minisig
+gh release upload v1.5 EndlessSky-Miyoo-1.5.zip.minisig
+```
+
+Each asset `X` gets `X.minisig` beside it in the same release. Sign
+without `-l`: the default (prehashed) signature is checked while the file
+streams, while a legacy one needs the whole file in memory and is refused
+over 16 MB. MiniMart refuses to install a signed entry whose `.minisig` is
+missing or doesn't verify.
+
+`cmd/minisig` checks a signature on the device or in a shell script:
+
+```sh
+minisig [-p PUBKEY_FILE] -m FILE [-x SIGFILE]
+```
+
+It prints the trusted comment and exits 0 when the signature is good,
+exits 1 with one line on stderr saying why when it isn't (or a file can't
+be read), and 2 on a usage error. Without `-p` it uses `sign.ReleaseKey`;
+`-x` defaults to `FILE.minisig`. `make minisig` builds it for the device
+into `dist/minisig-armv7` (static, about 2 MB); the Bundle workflow
+attaches the same build to MiniDeck's release as `minisig-armv7`.
 
 The library is versioned with tags like any Go module; an app picks up a
 new one with `go get github.com/zakijss/minideck@vx.y.z`.

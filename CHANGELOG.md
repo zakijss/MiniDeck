@@ -7,6 +7,13 @@ changelog in its repository. The format follows
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-11-19
+
+### Added
+
+- `sign`: checks minisign signatures, prehashed (`ED`, streamed, any size) and legacy (`Ed`, up to 16 MB), including the key id and the signed trusted comment. `sign.ReleaseKey` is the owner's release key.
+- `cmd/minisig`: a small static checker for the device and shell scripts (`minisig -p KEY -m FILE -x SIG`), built by `make minisig` and attached to the Bundle release as `minisig-armv7`.
+
 ## [1.2.0] - 2026-11-19
 
 ### Added
@@ -99,7 +106,8 @@ changelog in its repository. The format follows
   apps' own releases.
 - `tools/cover`, `tools/mockhub` and the app icons.
 
-[Unreleased]: https://github.com/zakijss/MiniDeck/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/zakijss/MiniDeck/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/zakijss/MiniDeck/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/zakijss/MiniDeck/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/zakijss/MiniDeck/compare/v1.0.4...v1.1.0
 [1.0.4]: https://github.com/zakijss/MiniDeck/compare/v1.0.3...v1.0.4

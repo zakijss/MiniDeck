@@ -12,9 +12,9 @@ else
 RUN      := $(DOCKER) $(GO_IMAGE)
 GOFMT    := $(DOCKER) $(GO_IMAGE) gofmt
 endif
-DIRS     := ui tnet secrets cache appdir atomicfile procs qr fb version tools
+DIRS     := ui tnet secrets cache appdir atomicfile procs qr fb version sign cmd tools
 
-.PHONY: help test vet fmt lint check icons bundle clean
+.PHONY: help test vet fmt lint check icons bundle minisig clean
 
 help: ## list the targets
 	@awk -F':.*## ' '/^[a-z-]+:.*## /{printf "  %-8s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -41,6 +41,9 @@ icons: ## draw the app icons into icons/
 
 bundle: ## the all-apps release from the apps' latest releases, into dist/
 	$(GO) run ./tools/bundle -o dist
+
+minisig: ## the minisig checker for the device (ARMv7), into dist/minisig-armv7
+	$(RUN) env CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -trimpath -ldflags "-s -w" -o dist/minisig-armv7 ./cmd/minisig
 
 clean:
 	rm -rf build dist

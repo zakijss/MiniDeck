@@ -1,7 +1,8 @@
 The MiniDeck library includes third-party material under its own licence.
 Every app's release zip carries these licences in its licenses/ folder.
 
-golang.org/x/net, golang.org/x/image, golang.org/x/text and
+golang.org/x/net, golang.org/x/image, golang.org/x/text,
+golang.org/x/crypto (BLAKE2b, for minisign checks) and
 golang.org/x/crypto/x509roots/fallback (Mozilla's root certificates,
 compiled into the apps that use HTTPS because the device has no
 certificate store), copyright The Go Authors, BSD 3-Clause licence

@@ -49,7 +49,8 @@ Mini v2 to v4 run Onion on the same chip but are untested.
 ## This repository
 
 The Go library the apps share (`github.com/zakijss/minideck`: the
-interface, themes, tailnet access, encrypted secrets), the app icons,
+interface, themes, tailnet access, encrypted secrets, minisign checks), the
+`minisig` checker for signed releases, the app icons,
 development tools, and the release that bundles every app with MiniMart's
 catalogue. [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) covers building and
 contributing to any of the repositories.
