@@ -163,6 +163,19 @@ var glyphs = map[string][]string{
 .##.#######.
 ............
 ............`),
+	"folder": rowsOf(`
+............
+............
+.####.......
+.##########.
+.##########.
+............
+.##########.
+.##########.
+.##########.
+.##########.
+.##########.
+............`),
 	"shuffle": rowsOf(`
 ............
 .........#..
@@ -379,7 +392,7 @@ func iconScale(sz int) int { return max(1, (sz+6)/12) }
 
 // Icon draws a named icon in a box of size sz with its top-left at (x, y).
 // Names: play, pause, prev, next, note, disc, dice, chart, clock, star,
-// person, list, shuffle, gear, plus, server, check, cross, wifi, eye,
+// person, list, folder, shuffle, gear, plus, server, check, cross, wifi, eye,
 // palette, sun, drop, backspace, chev-left, chev-right, chev-up, chev-down.
 // Icons are pixel glyphs on a 12x12 grid, scaled by a whole number and
 // centred in the box.
@@ -395,7 +408,7 @@ func (s *Screen) Icon(name string, x, y, sz int, c color.Color) {
 
 // iconColors gives each icon its own colour on a tile, as the app icons do.
 var iconColors = map[string]ramp{
-	"star": yellowRamp, "list": skyRamp, "gear": steelRamp, "plus": greenRamp,
+	"star": yellowRamp, "list": skyRamp, "folder": yellowRamp, "gear": steelRamp, "plus": greenRamp,
 	"play": redRamp, "dice": orangeRamp, "server": lavRamp, "chart": skyRamp,
 	"clock": orangeRamp, "person": pinkRamp, "shuffle": lavRamp, "disc": skyRamp,
 	"note": pinkRamp, "wifi": skyRamp, "check": greenRamp, "cross": redRamp,

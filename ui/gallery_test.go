@@ -133,7 +133,7 @@ func TestGallery(t *testing.T) {
 	// icons, plain and on tiles
 	s.Background()
 	top = s.Header("Icons", "Every glyph, at 24, 36 and on a tile")
-	names := []string{"play", "pause", "prev", "next", "note", "disc", "dice", "chart", "clock", "star", "person", "list", "shuffle",
+	names := []string{"play", "pause", "prev", "next", "note", "disc", "dice", "chart", "clock", "star", "person", "list", "folder", "shuffle",
 		"gear", "plus", "server", "check", "cross", "wifi", "chev-left", "chev-right", "chev-up", "chev-down", "eye", "backspace"}
 	for i, n := range names {
 		x, y := 24+(i%13)*46, top+(i/13)*150

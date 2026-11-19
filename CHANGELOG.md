@@ -13,6 +13,7 @@ changelog in its repository. The format follows
 
 - `ui`: L2 and R2 go to a list's first and last row in every `List`.
 - `ui`: `Battery()` returns the charge, whether it is charging and whether it is low, as the status bar shows them, so an app can hold off a big download.
+- `ui`: a `folder` icon, yellow on a tile.
 - `ui`: below 15% and not charging, the status bar's battery percentage turns red with the bar.
 
 ### Changed
