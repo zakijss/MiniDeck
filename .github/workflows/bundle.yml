@@ -23,6 +23,7 @@ jobs:
         run: go run ./tools/bundle -o dist
       - name: The minisig checker for the device
         run: |
+          RELEASE=1 go test -count=1 -run TestReleaseKey ./sign  # never ship the test key
           CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 go build -trimpath -ldflags "-s -w" -o dist/minisig-armv7 ./cmd/minisig
           (cd dist && sha256sum minisig-armv7 >> SHA256SUMS)
       - name: MiniMart installs every app from the catalogue

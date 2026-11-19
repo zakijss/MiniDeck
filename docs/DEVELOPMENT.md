@@ -239,6 +239,11 @@ minisign -S -s ~/.minisign/release.key -m EndlessSky-Miyoo-1.5.zip   # writes En
 gh release upload v1.5 EndlessSky-Miyoo-1.5.zip.minisig
 ```
 
+`sign.ReleaseKey` holds a throwaway test key until the owner's key
+replaces it (the line marked `TODO-KEY`). `RELEASE=1 go test -run
+TestReleaseKey ./sign` fails while it does; the Bundle workflow and
+MiniMart's release workflow run it, so nothing ships with the test key.
+
 Each asset `X` gets `X.minisig` beside it in the same release. Sign
 without `-l`: the default (prehashed) signature is checked while the file
 streams, while a legacy one needs the whole file in memory and is refused

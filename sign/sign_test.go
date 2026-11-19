@@ -185,3 +185,22 @@ func FuzzParse(f *testing.F) {
 		ParsePublicKey(string(b))
 	})
 }
+
+// TestReleaseKey stops a release built with the throwaway test key: the
+// release workflows run it with RELEASE=1.
+func TestReleaseKey(t *testing.T) {
+	if os.Getenv("RELEASE") != "1" {
+		t.Skip("RELEASE=1 checks the release key")
+	}
+	k, err := ParsePublicKey(ReleaseKey)
+	if err != nil {
+		t.Fatal(err)
+	}
+	src, err := os.ReadFile("sign.go")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if k.IDString() == "5D74EC25FBDD46EC" || strings.Contains(string(src), "TODO-"+"KEY") {
+		t.Fatal("sign.ReleaseKey is still the test key: put the owner's release key there")
+	}
+}
