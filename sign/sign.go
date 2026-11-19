@@ -26,7 +26,7 @@ import (
 
 // ReleaseKey is the public key MiniDeck's owner signs releases with: the
 // second line of the key's minisign.pub.
-const ReleaseKey = "RWTsRt37Jex0XWULZZMDBYR3DmYEdNjLWU/wh2NCJ4+Q1WwRu8TlUnfS" // TODO-KEY: the throwaway test key; put the owner's release key here before a release
+const ReleaseKey = "RWRGexQYg+Iz7qmCsthbkahuuq2lZFD6stbL++5numHHKPnsxWhoOM1K"
 
 // MaxLegacy is the largest file a legacy ("Ed") signature is checked
 // over: the whole file is read into memory.

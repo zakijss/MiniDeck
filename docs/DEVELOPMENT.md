@@ -235,14 +235,14 @@ with the owner, behind its passphrase; CI never signs. To sign a release,
 after its assets are built and before or after it is published:
 
 ```sh
-minisign -S -s ~/.minisign/release.key -m EndlessSky-Miyoo-1.5.zip   # writes EndlessSky-Miyoo-1.5.zip.minisig
+minisign -S -s ~/.minisign/zjss-release.key -m EndlessSky-Miyoo-1.5.zip   # writes EndlessSky-Miyoo-1.5.zip.minisig
 gh release upload v1.5 EndlessSky-Miyoo-1.5.zip.minisig
 ```
 
-`sign.ReleaseKey` holds a throwaway test key until the owner's key
-replaces it (the line marked `TODO-KEY`). `RELEASE=1 go test -run
-TestReleaseKey ./sign` fails while it does; the Bundle workflow and
-MiniMart's release workflow run it, so nothing ships with the test key.
+`sign.ReleaseKey` is the owner's release key (id EE33E28318147B46). The
+tests use a separate throwaway key in `sign/testdata`. `RELEASE=1 go test
+-run TestReleaseKey ./sign` fails if the test key ever comes back; the
+Bundle workflow and MiniMart's release workflow run it.
 
 Each asset `X` gets `X.minisig` beside it in the same release. Sign
 without `-l`: the default (prehashed) signature is checked while the file

@@ -46,7 +46,7 @@ func TestMinisignVectors(t *testing.T) {
 	if k.IDString() != "5D74EC25FBDD46EC" {
 		t.Fatalf("key id %s", k.IDString())
 	}
-	if bare, err := ParsePublicKey(ReleaseKey + "\n"); err != nil || bare.ID != k.ID {
+	if bare, err := ParsePublicKey(ReleaseKey + "\n"); err != nil || bare.IDString() != "EE33E28318147B46" {
 		t.Fatalf("bare key line: %v", err)
 	}
 	for _, c := range []struct {
