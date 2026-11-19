@@ -29,8 +29,13 @@ type glyph struct {
 // every frame.
 var pictures = struct {
 	sync.Mutex
-	m map[picKey]*image.RGBA
+	m     map[picKey]*image.RGBA
+	bytes int // the scaled pictures' pixels, together
 }{m: map[picKey]*image.RGBA{}}
+
+// maxPictureBytes caps the scaled pictures kept: 96 large covers would
+// otherwise hold tens of megabytes, more than an app has to spare.
+const maxPictureBytes = 6 << 20
 
 type picKey struct {
 	img    image.Image
@@ -77,10 +82,11 @@ func scaledRound(img image.Image, w, h, rad int) *image.RGBA {
 	if p, ok := pictures.m[k]; ok {
 		return p
 	}
-	if len(pictures.m) > 96 {
-		pictures.m = map[picKey]*image.RGBA{}
+	if len(pictures.m) > 96 || pictures.bytes+w*h*4 > maxPictureBytes {
+		pictures.m, pictures.bytes = map[picKey]*image.RGBA{}, 0
 	}
 	p := ScaleCrop(img, w, h)
+	pictures.bytes += len(p.Pix)
 	sh := rectShape(p.Bounds(), rad)
 	for y := 0; y < h; y++ {
 		sp := sh.rows[y/art]

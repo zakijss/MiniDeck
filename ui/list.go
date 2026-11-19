@@ -27,20 +27,34 @@ type List struct {
 	top   int
 }
 
-// Handle moves the selection; it reports whether the event was used.
+// Handle moves the selection; it reports whether the event was used. Up
+// and Down go round from one end to the other on a fresh press, but a held
+// button stops at the end, so holding it doesn't spin past the row it was
+// heading for. Left/L1 and Right/R1 move six rows, L2 and R2 go to the first
+// and the last.
 func (l *List) Handle(ev Event) bool {
-	if !ev.Pressed || len(l.Items) == 0 {
+	n := len(l.Items)
+	if !ev.Pressed || n == 0 {
 		return false
 	}
+	l.Sel = min(max(l.Sel, 0), n-1)
 	switch ev.Button {
 	case Up:
-		l.Sel = (l.Sel - 1 + len(l.Items)) % len(l.Items)
+		if l.Sel > 0 || !ev.Repeat {
+			l.Sel = (l.Sel - 1 + n) % n
+		}
 	case Down:
-		l.Sel = (l.Sel + 1) % len(l.Items)
+		if l.Sel < n-1 || !ev.Repeat {
+			l.Sel = (l.Sel + 1) % n
+		}
 	case Left, L1:
 		l.Sel = max(0, l.Sel-6)
 	case Right, R1:
-		l.Sel = min(len(l.Items)-1, l.Sel+6)
+		l.Sel = min(n-1, l.Sel+6)
+	case L2:
+		l.Sel = 0
+	case R2:
+		l.Sel = n - 1
 	default:
 		return false
 	}
@@ -94,6 +108,12 @@ func (l *List) Draw(s *Screen, r image.Rectangle) {
 	if len(l.Items) < rows {
 		rh = l.rowH()
 	}
+	// The items may have shrunk since the last draw: keep the selection on
+	// a row, and don't leave room below the last one empty.
+	if len(l.Items) > 0 {
+		l.Sel = min(max(l.Sel, 0), len(l.Items)-1)
+	}
+	l.top = min(l.top, max(0, len(l.Items)-rows))
 	if l.Sel < l.top {
 		l.top = l.Sel
 	}

@@ -14,6 +14,9 @@ func TestOnTailnet(t *testing.T) {
 	for host, want := range map[string]bool{
 		"homeserver:4533": true, "nas": true, "box.tail1234.ts.net": true, "100.100.1.2:80": true,
 		"127.0.0.1:4533": false, "localhost": false, "192.168.1.10": false, "music.example.com": false,
+		// IPv6, with and without a port: the URL's host keeps the brackets
+		"[fd7a:115c:a1e0::1]": true, "[fd7a:115c:a1e0::1]:8096": true,
+		"[::1]": false, "[::1]:4533": false, "[fe80::1]": false, "LOCALHOST": false,
 	} {
 		if got := OnTailnet(host); got != want {
 			t.Errorf("OnTailnet(%q) = %v", host, got)

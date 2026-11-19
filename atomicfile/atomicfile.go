@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"sync"
 )
 
 // ErrReadBack means the data read back from the card wasn't what was
@@ -28,7 +29,15 @@ func WriteChecked(path string, b []byte, perm os.FileMode) error {
 	return write(path, b, perm, true)
 }
 
+// locks holds a mutex per path: two goroutines saving the same file at
+// once would otherwise share its temporary file, and one could rename the
+// other's half-written data into place.
+var locks sync.Map
+
 func write(path string, b []byte, perm os.FileMode, check bool) error {
+	mu, _ := locks.LoadOrStore(filepath.Clean(path), new(sync.Mutex))
+	mu.(*sync.Mutex).Lock()
+	defer mu.(*sync.Mutex).Unlock()
 	tmp := filepath.Join(filepath.Dir(path), "."+filepath.Base(path)+".tmp")
 	f, err := os.OpenFile(tmp, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, perm)
 	if err != nil {
@@ -58,6 +67,12 @@ func write(path string, b []byte, perm os.FileMode, check bool) error {
 	if err := os.Rename(tmp, path); err != nil {
 		os.Remove(tmp)
 		return err
+	}
+	// Flush the folder too, so the rename itself is on the card when Write
+	// returns, not only the data. Best effort: the file is in place.
+	if d, err := os.Open(filepath.Dir(path)); err == nil {
+		d.Sync()
+		d.Close()
 	}
 	return nil
 }

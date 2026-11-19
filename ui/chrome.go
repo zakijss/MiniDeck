@@ -173,6 +173,18 @@ func axpCharging(out string) bool {
 	return after[:end] == "3"
 }
 
+// lowBattery is the charge, in percent, at which the status bar turns red.
+const lowBattery = 15
+
+// Battery returns the charge in percent (-1 when unknown) and whether the
+// charger is charging it, as the status bar shows them; read at most every
+// 20 s. Low is true at the charge where the bar turns red, unless
+// charging: a time to stop a big download, say, or save early.
+func Battery() (pct int, charging, low bool) {
+	st := readStatusInfo()
+	return st.battery, st.charging, st.battery >= 0 && st.battery <= lowBattery && !st.charging
+}
+
 // statusKey changes whenever the status bar would look different.
 func statusKey() string {
 	st := readStatusInfo()

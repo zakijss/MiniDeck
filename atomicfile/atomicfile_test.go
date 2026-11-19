@@ -1,8 +1,10 @@
 package atomicfile
 
 import (
+	"bytes"
 	"os"
 	"path/filepath"
+	"sync"
 	"testing"
 )
 
@@ -44,5 +46,29 @@ func TestWriteChecked(t *testing.T) {
 	}
 	if ents, _ := os.ReadDir(dir); len(ents) != 2 {
 		t.Fatalf("left behind: %v", ents)
+	}
+}
+
+// Saves of the same file from several goroutines at once each land whole:
+// the file always holds one of the writes, never a mix.
+func TestWriteConcurrent(t *testing.T) {
+	p := filepath.Join(t.TempDir(), "progress.json")
+	var wg sync.WaitGroup
+	for i := range 8 {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for range 5 {
+				if err := Write(p, bytes.Repeat([]byte{'a' + byte(i)}, 16<<10), 0644); err != nil {
+					t.Error(err)
+					return
+				}
+			}
+		}()
+	}
+	wg.Wait()
+	b, _ := os.ReadFile(p)
+	if len(b) != 16<<10 || !bytes.Equal(b, bytes.Repeat(b[:1], len(b))) {
+		t.Fatalf("mixed or short file: %d bytes", len(b))
 	}
 }

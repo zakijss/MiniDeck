@@ -150,6 +150,12 @@ The UI kit's rules:
   changed, so a redraw that changes little is cheap.
 - Long work runs in a goroutine; the event loop waits on the input channel
   and the goroutine's results, and redraws when either arrives.
+- Lists move the same way in every app through `List.Handle`: Up and
+  Down (round at the ends on a fresh press, stopping there while held),
+  Left/L1 and Right/R1 six rows, L2 and R2 the first and last row. Handle
+  a button before calling it to give it another job.
+- `ui.Battery()` gives the charge as the status bar shows it, and whether
+  it is low (15% or less, not charging): a time to hold off a big download.
 
 ## Themes and backgrounds
 

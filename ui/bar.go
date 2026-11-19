@@ -85,7 +85,7 @@ func (s *Screen) battery(x, y, pct int, charging bool) {
 	c := greenRamp
 	switch {
 	case charging:
-	case pct <= 15:
+	case pct <= lowBattery:
 		c = redRamp
 	case pct <= 30:
 		c = orangeRamp
@@ -114,7 +114,11 @@ func (s *Screen) StatusBar() int {
 		x -= 6
 		txt := itoa(st.battery) + "%"
 		x -= Measure(Caps, txt)
-		s.Text(x, centerY(Caps, cy), txt, Caps, Muted)
+		col := Muted
+		if st.battery <= lowBattery && !st.charging {
+			col = Bad // the number too, not only the bar: plug it in soon
+		}
+		s.Text(x, centerY(Caps, cy), txt, Caps, col)
 		if st.charging {
 			x -= 6 + 5*art
 			s.glyph(x, cy-7*art/2, boltGlyph, yellowRamp.base, nil)
@@ -273,15 +277,25 @@ func (s *Screen) Footer(hints ...Hint) {
 func (s *Screen) Alert(title, body string, buttons ...string) {
 	s.Background()
 	s.StatusBar()
-	lines := Wrap(Body, body, 430)
-	h := 40 + LineHeight(Heading) + 10 + len(lines)*LineHeight(Body)
+	h := 40 + LineHeight(Heading) + 10
 	if len(buttons) > 0 {
 		h += 74
 	}
+	// A long message (a server's error page, say) is cut to the lines that
+	// fit between the status bar and the bottom, and a word too long for a
+	// line is cut too, so the card never runs off the screen.
+	lines := Wrap(Body, body, 430)
+	if most := max(1, (H-2*(44+s.inset())-h)/LineHeight(Body)); len(lines) > most {
+		lines = append(lines[:most-1:most-1], lines[most-1]+" …")
+	}
+	for i, l := range lines {
+		lines[i] = Fit(Body, l, 430)
+	}
+	h += len(lines) * LineHeight(Body)
 	card := image.Rect(W/2-240, (H-h)/2, W/2+240, (H+h)/2)
 	s.PanelTint(card, 24, 0.13)
 	y := card.Min.Y + 24
-	s.TextCenter(W/2, y, title, Heading, Text)
+	s.TextCenter(W/2, y, Fit(Heading, title, 440), Heading, Text)
 	y += LineHeight(Heading) + 10
 	for _, l := range lines {
 		s.TextCenter(W/2, y, l, Body, Muted)

@@ -73,10 +73,14 @@ func (fm *Form) Run(s *Screen, input <-chan Event) bool {
 		msg = ""
 		r := rows[sel]
 		switch ev.Button {
-		case Up:
-			sel = (sel - 1 + len(rows)) % len(rows)
+		case Up: // a held button stops at the end, like a List
+			if sel > 0 || !ev.Repeat {
+				sel = (sel - 1 + len(rows)) % len(rows)
+			}
 		case Down:
-			sel = (sel + 1) % len(rows)
+			if sel < len(rows)-1 || !ev.Repeat {
+				sel = (sel + 1) % len(rows)
+			}
 		case B, Menu:
 			return false
 		case Left, Right:
@@ -294,11 +298,12 @@ func (fm *Form) draw(s *Screen, rows []formRow, sel int, msg string) {
 }
 
 // Confirm asks a yes/no question as an alert: A answers yes (labelled
-// yes), B goes back.
+// yes), B goes back. Auto-repeats are ignored: the A that opened the
+// question, still held, must not answer it.
 func (s *Screen) Confirm(input <-chan Event, title, body, yes string) bool {
 	s.Alert(title, body, yes, "Back")
 	for ev := range input {
-		if !ev.Pressed {
+		if !ev.Pressed || ev.Repeat {
 			continue
 		}
 		switch ev.Button {
@@ -311,11 +316,12 @@ func (s *Screen) Confirm(input <-chan Event, title, body, yes string) bool {
 	return false
 }
 
-// Notice shows a message as an alert until A or B is pressed.
+// Notice shows a message as an alert until A or B is pressed (a fresh
+// press: a held button doesn't dismiss it unread).
 func (s *Screen) Notice(input <-chan Event, title, body string) {
 	s.Alert(title, body, "OK")
 	for ev := range input {
-		if ev.Pressed && (ev.Button == A || ev.Button == B || ev.Button == Menu) {
+		if ev.Pressed && !ev.Repeat && (ev.Button == A || ev.Button == B || ev.Button == Menu) {
 			return
 		}
 	}

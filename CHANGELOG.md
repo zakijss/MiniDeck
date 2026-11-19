@@ -7,6 +7,27 @@ changelog in its repository. The format follows
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-11-19
+
+### Added
+
+- `ui`: L2 and R2 go to a list's first and last row in every `List`.
+- `ui`: `Battery()` returns the charge, whether it is charging and whether it is low, as the status bar shows them, so an app can hold off a big download.
+- `ui`: below 15% and not charging, the status bar's battery percentage turns red with the bar.
+
+### Changed
+
+- `ui`: holding Up or Down in a list or a form stops at the first or last row; a fresh press still goes round to the other end.
+
+### Fixed
+
+- `ui`: a held A no longer answers the question it opened (Remove in a form), and a held button no longer dismisses a notice before it can be read: `Confirm` and `Notice` wait for a fresh press.
+- `ui`: a list whose items shrank under the selection (or whose `Sel` was set out of range, such as -1) drew nothing or crashed; it now keeps the selection on a row and fills the space.
+- `ui`: a long error message or title no longer runs the alert card off the screen; it is cut with an ellipsis.
+- `ui`: the scaled pictures kept for redrawing (cover art) are capped at 6 MB, so a long listening session can't use up the app's memory.
+- `atomicfile`: two goroutines saving the same file at once could rename half-written data into place or fail; saves of one file now take turns. Each save also flushes the folder, so a power cut just after it keeps the new file.
+- `tnet`: an IPv6 address without a port (`http://[::1]/`) was sent to the tailnet as if it were a device name, and Tailscale's own IPv6 addresses (fd7a:115c:a1e0::/48) weren't.
+
 ## [1.1.0] - 2026-11-12
 
 ### Added
@@ -76,7 +97,8 @@ changelog in its repository. The format follows
   apps' own releases.
 - `tools/cover`, `tools/mockhub` and the app icons.
 
-[Unreleased]: https://github.com/zakijss/MiniDeck/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/zakijss/MiniDeck/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/zakijss/MiniDeck/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/zakijss/MiniDeck/compare/v1.0.4...v1.1.0
 [1.0.4]: https://github.com/zakijss/MiniDeck/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/zakijss/MiniDeck/compare/v1.0.2...v1.0.3

@@ -1,8 +1,9 @@
 // Package tnet gives apps an HTTP client that reaches tailnet hosts through
 // MiniDeck's SOCKS5 proxy and everything else directly.
 //
-// A host goes through the tailnet when it is a 100.64.0.0/10 address, ends in
-// .ts.net, or is a single-label name (MagicDNS). When MiniScale joins a
+// A host goes through the tailnet when it is a 100.64.0.0/10 or
+// fd7a:115c:a1e0::/48 address, ends in .ts.net, or is a single-label name
+// (MagicDNS). When MiniScale joins a
 // WireGuard or NetBird network instead, it lists in /tmp/miniscale/routes
 // what else goes through the proxy (see routes). The proxies listen on the
 // ports set in MiniScale's miniscale.conf (1055 and 1056 by default).
@@ -25,6 +26,9 @@ import (
 )
 
 var cgnat = &net.IPNet{IP: net.IPv4(100, 64, 0, 0), Mask: net.CIDRMask(10, 32)}
+
+// tsULA is Tailscale's IPv6 range.
+var tsULA = &net.IPNet{IP: net.ParseIP("fd7a:115c:a1e0::"), Mask: net.CIDRMask(48, 128)}
 
 // confFile is MiniScale's settings file, where the user can move the
 // proxies to other ports.
@@ -112,11 +116,13 @@ func OnTailnet(host string) bool {
 	if h, _, err := net.SplitHostPort(host); err == nil {
 		host = h
 	}
-	if host == "localhost" {
+	// an IPv6 address without a port keeps its brackets ("[::1]")
+	host = strings.TrimSuffix(strings.TrimPrefix(host, "["), "]")
+	if strings.EqualFold(host, "localhost") {
 		return false
 	}
 	if ip := net.ParseIP(host); ip != nil {
-		return cgnat.Contains(ip) || currentRoutes().hasIP(ip)
+		return cgnat.Contains(ip) || tsULA.Contains(ip) || currentRoutes().hasIP(ip)
 	}
 	return strings.HasSuffix(host, ".ts.net") || !strings.Contains(host, ".") || currentRoutes().hasName(host)
 }
