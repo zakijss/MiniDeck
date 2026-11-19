@@ -118,10 +118,15 @@ func OnTailnet(host string) bool {
 	}
 	// an IPv6 address without a port keeps its brackets ("[::1]")
 	host = strings.TrimSuffix(strings.TrimPrefix(host, "["), "]")
+	// a link-local address names its interface ("fe80::1%eth0")
+	host, _, _ = strings.Cut(host, "%")
 	if strings.EqualFold(host, "localhost") {
 		return false
 	}
 	if ip := net.ParseIP(host); ip != nil {
+		if ip.IsLinkLocalUnicast() { // the local network, never the tailnet
+			return false
+		}
 		return cgnat.Contains(ip) || tsULA.Contains(ip) || currentRoutes().hasIP(ip)
 	}
 	return strings.HasSuffix(host, ".ts.net") || !strings.Contains(host, ".") || currentRoutes().hasName(host)

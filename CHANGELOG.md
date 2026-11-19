@@ -28,6 +28,7 @@ changelog in its repository. The format follows
 - `ui`: the scaled pictures kept for redrawing (cover art) are capped at 6 MB, so a long listening session can't use up the app's memory.
 - `atomicfile`: two goroutines saving the same file at once could rename half-written data into place or fail; saves of one file now take turns. Each save also flushes the folder, so a power cut just after it keeps the new file.
 - `tnet`: an IPv6 address without a port (`http://[::1]/`) was sent to the tailnet as if it were a device name, and Tailscale's own IPv6 addresses (fd7a:115c:a1e0::/48) weren't.
+- `tnet`: a link-local address with its interface named (`http://[fe80::1%25eth0]/`) went through the tailnet proxy as if it were a device name. Link-local addresses now always stay direct.
 
 ## [1.1.0] - 2026-11-12
 

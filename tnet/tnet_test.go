@@ -17,6 +17,8 @@ func TestOnTailnet(t *testing.T) {
 		// IPv6, with and without a port: the URL's host keeps the brackets
 		"[fd7a:115c:a1e0::1]": true, "[fd7a:115c:a1e0::1]:8096": true,
 		"[::1]": false, "[::1]:4533": false, "[fe80::1]": false, "LOCALHOST": false,
+		// link-local, with the interface named: the local network
+		"[fe80::1%eth0]": false, "[fe80::1%eth0]:8096": false, "fe80::1%wlan0": false,
 	} {
 		if got := OnTailnet(host); got != want {
 			t.Errorf("OnTailnet(%q) = %v", host, got)
@@ -179,7 +181,7 @@ func TestRoutesFile(t *testing.T) {
 		t.Error("WireGuard routes")
 	}
 	reload("0.0.0.0/0\n::/0\n*\n")
-	if !OnTailnet("192.168.0.10") || OnTailnet("localhost:8080") || OnTailnet("127.0.0.1:45211") || OnTailnet("[::1]:80") {
+	if !OnTailnet("192.168.0.10") || OnTailnet("localhost:8080") || OnTailnet("127.0.0.1:45211") || OnTailnet("[::1]:80") || OnTailnet("[fe80::1%eth0]:80") {
 		t.Error("full tunnel: everything but this device's own services")
 	}
 }
