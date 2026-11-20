@@ -1,4 +1,4 @@
-<p align="center"><img src="docs/hero.jpg" alt="Three Miyoo Mini Plus handhelds on a pale stone table with teacups: a grey one on a stand showing MiniMart, a white one playing music in MiniTape and a smoked black one in MiniFin" width="100%"></p>
+<p align="center"><img src="docs/hero.jpg" alt="Three Miyoo Mini Plus handhelds on a plywood bench in an artist's studio, with spray cans and a vase: a grey one on a stand showing MiniMart, a white one playing music in MiniTape and a smoked black one in MiniFin" width="100%"></p>
 
 [![CI](https://github.com/zakijss/MiniDeck/actions/workflows/ci.yml/badge.svg)](https://github.com/zakijss/MiniDeck/actions/workflows/ci.yml)
 [![Bundle](https://github.com/zakijss/MiniDeck/actions/workflows/bundle.yml/badge.svg)](https://github.com/zakijss/MiniDeck/releases/latest)
@@ -21,7 +21,7 @@ Apps for the Miyoo Mini Plus on Onion OS: a Tailscale, Headscale, WireGuard and 
 | [MiniRadar](https://github.com/zakijss/MiniRadar) | The devices on your Wi-Fi, and Wake-on-LAN |
 | [MiniPulse](https://github.com/zakijss/MiniPulse) | Latency, download and upload over Wi-Fi |
 
-<p align="center"><img src="docs/desk.jpg" alt="A grey Miyoo Mini Plus on a stand on an oak desk by a keyboard and a mug, showing MiniMart, with a white one beside it playing music in MiniTape" width="100%"></p>
+<p align="center"><img src="docs/desk.jpg" alt="A clear purple Miyoo Mini Plus showing MiniMart's ports and a white one showing MiniTop, both on stands on a plywood bench in an artist's studio" width="100%"></p>
 
 ## Install
 
